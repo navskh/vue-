@@ -244,46 +244,46 @@ https://fyzh99.tistory.com/34 참조
     로그인/ 회원가입 버튼 
 
     1) 로그인 버튼 클릭 시
-        axios로 서버단과 통신
-        dao.js > user 메서드에서 해당 UserID로 검색하여 해당 user의 이름.  password 정보 가져옴
-        만약 user 에 아이디가 있는 경우 LoginFlag를 true로 만들어줌 (LoginFlag가 false일 시 success:false로 설정)
-        LoginFlag true인 경우 전역변수 uID에 저장하고(헤더에 이름 띄워주기 위함) 클라이언트단에 보내줌
+      axios로 서버단과 통신
+      dao.js > user 메서드에서 해당 UserID로 검색하여 해당 user의 이름.  password 정보 가져옴
+      만약 user 에 아이디가 있는 경우 LoginFlag를 true로 만들어줌 (LoginFlag가 false일 시 success:false로 설정)
+      LoginFlag true인 경우 전역변수 uID에 저장하고(헤더에 이름 띄워주기 위함) 클라이언트단에 보내줌
 
     2) 서버로부터 응답받은 후
-        success:false라면  존재하지 않는 아이디 식별
-        success:true 인 경우 password 비교하여 일치하면 로그인 성공
-        로그인 성공 시 LoginFlag를 true로 만들어 전달.
-        리스트를 띄워줌.
+      success:false라면  존재하지 않는 아이디 식별
+      success:true 인 경우 password 비교하여 일치하면 로그인 성공
+      로그인 성공 시 LoginFlag를 true로 만들어 전달.
+      리스트를 띄워줌.
 
     3) 회원가입 버튼 클릭 시 
-        fnUserAdd() 호출, UserAdd.vue 로 이동        
+      fnUserAdd() 호출, UserAdd.vue 로 이동        
 
 - UserAdd.vue
     1) UI 보면
-        이름, 아이디(중복체크), 비밀번호, 비밀번호 확인,  회원가입 완료
-        v-model 로 data 바인딩 해줌
+      이름, 아이디(중복체크), 비밀번호, 비밀번호 확인,  회원가입 완료
+      v-model 로 data 바인딩 해줌
 
     2) 중복체크(fnCheck) 
-        userId를 넣어서 서버측에 보냄.
-        같은 id가 있을 경우 checkID 를 1로만듬 
-        같은 id 없으면 checkID = 0 으로 만듬 
-        (checkID 기본 값 1임.)
+      userId를 넣어서 서버측에 보냄.
+      같은 id가 있을 경우 checkID 를 1로만듬 
+      같은 id 없으면 checkID = 0 으로 만듬 
+      (checkID 기본 값 1임.)
 
     3) 비밀번호 확인 (passwordConfirm)
-        password와 passwordConfirm 값이 같으면 완료 메세지 띄우고 그전까지는 경고 메세지 띄움
-        같지 않은 상태면 회원가입시 막힘 얼럿 창 뜸
+      password와 passwordConfirm 값이 같으면 완료 메세지 띄우고 그전까지는 경고 메세지 띄움
+      같지 않은 상태면 회원가입시 막힘 얼럿 창 뜸
 
     4) 회원가입 (fnSubmitForm)
-        userName
-        userID
-        password
-        passwordConfirm
-        이 모두 완료 되면 서버측과 통신하여
-        회원가입 시킴
+      userName
+      userID
+      password
+      passwordConfirm
+      이 모두 완료 되면 서버측과 통신하여
+      회원가입 시킴
 
-        서버측에서는 dao.userAdd 메서드에서 
-        Insert로 user_info db에 추가시킴
+      서버측에서는 dao.userAdd 메서드에서 
+      Insert로 user_info db에 추가시킴
 
-        아이디 중복확인이 안될 경우는 특별히 걸러줘야 함.
+      아이디 중복확인이 안될 경우는 특별히 걸러줘야 함.
 
   - ASP.NET 게시판 리뷰 준비
