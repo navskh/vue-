@@ -1,29 +1,3 @@
-# firstweb
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-
 
 (21.04.30~21.05.03)
 리뷰 준비
@@ -127,6 +101,7 @@ https://fyzh99.tistory.com/34 참조
 
 - List.vue : "게시판 클릭" 시 리스트 가져오기.   
     List를 일단 불러오면..
+
     1) (리스트 불러오기 - 서버단에서의 동작) 
     91번줄 mounted() 로 이동한 후 
     this.fnGetList(2)를 실행함. (여기서 2로 준 이유는 기본 모드를 내림차순으로 설정하기 위함임.)
@@ -221,7 +196,8 @@ https://fyzh99.tistory.com/34 참조
 
     4) 목록 버튼 클릭 시 
     fnList() 호출
-    updown (내림차순, 오름차순 결정) 값을 받아서 다시 목록으로 되돌아감.
+    여기서 List로 돌아갈 때는 무조건 내림차순을 보여주도록 돌아감. 왜냐면 가장 최신 리스트가 보여져야 하기 때문임.
+
 
     5) 등록 버튼 클릭 시 
     fnAddProc() 이 호출되고
@@ -229,12 +205,85 @@ https://fyzh99.tistory.com/34 참조
 
     this.form 변수 안에 
     board_code : 기존에는 여러 카테고리로 나눠서 게시판을 구성하려 하였으나 하나의 카테고리만을 사용하므로 news로 통일
-    
+    subject : 제목
+    cont : content 내용
+    id : 작성자 id를 입력
 
-- View.vue
+    6) dao.js (add메서드 호출)
+    insert 문으로 해당 정보들을 db에 insert 시킴
+
+    7) 수정 호출 시 
+    fnModProc() 함수 호출
+    fnAddProc() 과 거의 비슷
+    dao.js 에서 mod 메서드를 보면 add 메서드에서 insert를 update로 바꿔준것 외에는 동일
+
+- View.vue : 게시판 상세 보기
+    1) fnGetView() 호출
+    제목, 내용, 작성자 정보 가져오고 그 정보를 페이지에 출력해줌
+    여기서 내용 정보를  replace (../) 추가해주어서 한칸 띄는 것이 가능하게 해주었다.
+
+    2) 페이지 상에서
+    22번 line 작성자가 지금 접속한 user의 id가 같으면
+    목록, 수정, 삭제 버튼 만들어줌.
+
+    3) 목록 버튼 클릭 시 
+    fnList() 호출 됨. updown 정보를 받아서 보내줌.
+    리스트 > 뷰 > 리스트 updown 값을 유지.
+
+    4) 수정 버튼 클릭 시 
+    fnMod()  호출 > body에 num 값을 넣어서 write로 이동
+
+    5) 삭제 버튼 
+      fnDelete() 호출
+      axios로 서버에 dao.js>delete 메서드 호출
+      num 값을 받아서 delete 문 전달
+      성공 하면 fnList() 호출하여 리스트 보여줌
+
 - User.vue
-- UserAdd.vue
+    로그인 시 
+    로그인/ 회원가입 버튼 
 
+    1) 로그인 버튼 클릭 시
+        axios로 서버단과 통신
+        dao.js > user 메서드에서 해당 UserID로 검색하여 해당 user의 이름.  password 정보 가져옴
+        만약 user 에 아이디가 있는 경우 LoginFlag를 true로 만들어줌 (LoginFlag가 false일 시 success:false로 설정)
+        LoginFlag true인 경우 전역변수 uID에 저장하고(헤더에 이름 띄워주기 위함) 클라이언트단에 보내줌
+
+    2) 서버로부터 응답받은 후
+        success:false라면  존재하지 않는 아이디 식별
+        success:true 인 경우 password 비교하여 일치하면 로그인 성공
+        로그인 성공 시 LoginFlag를 true로 만들어 전달.
+        리스트를 띄워줌.
+
+    3) 회원가입 버튼 클릭 시 
+        fnUserAdd() 호출, UserAdd.vue 로 이동        
+
+- UserAdd.vue
+    1) UI 보면
+        이름, 아이디(중복체크), 비밀번호, 비밀번호 확인,  회원가입 완료
+        v-model 로 data 바인딩 해줌
+
+    2) 중복체크(fnCheck) 
+        userId를 넣어서 서버측에 보냄.
+        같은 id가 있을 경우 checkID 를 1로만듬 
+        같은 id 없으면 checkID = 0 으로 만듬 
+        (checkID 기본 값 1임.)
+
+    3) 비밀번호 확인 (passwordConfirm)
+        password와 passwordConfirm 값이 같으면 완료 메세지 띄우고 그전까지는 경고 메세지 띄움
+        같지 않은 상태면 회원가입시 막힘 얼럿 창 뜸
+
+    4) 회원가입 (fnSubmitForm)
+        userName
+        userID
+        password
+        passwordConfirm
+        이 모두 완료 되면 서버측과 통신하여
+        회원가입 시킴
+
+        서버측에서는 dao.userAdd 메서드에서 
+        Insert로 user_info db에 추가시킴
+
+        아이디 중복확인이 안될 경우는 특별히 걸러줘야 함.
 
   - ASP.NET 게시판 리뷰 준비
-

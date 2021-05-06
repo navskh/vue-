@@ -37,7 +37,7 @@ export default {
       return{
         UserID:''
         ,PassWd:''
-        ,LoginFlag:'false'
+        ,LoginFlag:false
         ,userName:''
         }
   }
@@ -50,17 +50,19 @@ export default {
         UserID:this.UserID
         ,PassWd:this.PassWd
         ,userName:''
-        ,LoginFlag:'false'
+        ,LoginFlag:''
       }
       // this.$axios.post('http://localhost:3000/api/board/'+this.UserID,{params:this.user})
       this.$axios.get('http://localhost:3000/api',{params:this.user})
       .then((res)=>{
 				if(res.data.success) {
-					this.user = res.data.user.recordset[0];
-          this.LoginFlag='true'
+					this.LoginFlag=res.data.user.LoginFlag;
+          if(this.LoginFlag){ 
+          this.user = res.data.user.recordset[0];
           this.userName=this.user.name; 
           this.UserID=this.user.id;
           }
+        }
 				else {
 					alert("실행중 실패했습니다.\n다시 이용해 주세요.");
 				}
@@ -78,8 +80,6 @@ export default {
       .then((res)=>{
         if(res.data.success){
           alert("로그아웃 되었습니다.");
-          this.user.LoginFlag = 'false';
-          console.log(this.LoginFlag);
           this.$router.push({path:'/', user:this.user});
           // this.$router.go();
         }

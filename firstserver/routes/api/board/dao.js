@@ -7,7 +7,6 @@ var LoginFlag='false';
 
 exports.list = async (req,res) => { //리스트 모듈 router에서 호출
   // 일단은 변수 입력
-  console.log("리스트! 호출!");
   let ipp = 10;
   let totalCount = 0;
 	let block = 10;
@@ -20,8 +19,6 @@ exports.list = async (req,res) => { //리스트 모듈 router에서 호출
   let where = "";
 
   let pool = await db.getPool("Board");
-  let row = await pool.request()
-  .query("select * from tb_board2");
 
   body = req.query; // get
   
@@ -90,7 +87,6 @@ exports.add = async (req,res) => {
   let pool = await db.getPool("Board");
   console.log("글등록 실행!");
   body = req.body; //전송된 데이터를 받는다.
-  console.log(body);
   var sql = " INSERT INTO tb_board2 (board_code, subject, cont, id, regdate) values ('"
   +body.board_code
   +"','"
@@ -109,7 +105,6 @@ exports.add = async (req,res) => {
 
 exports.view = async(req,res) => {
   let pool = await db.getPool("Board");
-  // body = req.query;
   num = req.params.num;
 
   sql = " SELECT * FROM tb_board2 WHERE num = "+ num;
@@ -150,7 +145,7 @@ exports.user = async(req,res) => {
 
   pool.query(sql,(err,user) => {
     if(err) throw err;
-
+  
     if(user.rowsAffected[0]) LoginFlag='true';
     else LoginFlag='false';
     if(LoginFlag=='true') {
@@ -173,7 +168,6 @@ exports.header = async(req,res) => {
     if(err) throw err;
 
     user.LoginFlag=LoginFlag;
-    // console.log(user);
     res.send({success:true,user:user})
   })
 

@@ -48,10 +48,10 @@
         .then((res)=>{
 				if(res.data.success) {
 					this.user = res.data.user.recordset[0];
-          this.user.UserID = this.UserID;
-          this.user.LoginFlag = true;
           if(this.PassWd === this.user.password){
             alert("로그인 성공!");
+            this.user.UserID = this.UserID;
+            this.user.LoginFlag = true;
             this.$router.push({path:'./list', query:this.user});
             this.$router.go();
           }

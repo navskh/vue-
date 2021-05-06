@@ -33,14 +33,9 @@
 <script>
 import Editor from './Editor'
 
-// import { defaultExtensions } from '@tiptap/starter-kit'
-
 export default {
   components: {
     Editor,
-    // EditorContent,
-    // BubbleMenu,
-    // FloatingMenu,
   },
   
 	data() { //변수 생성
@@ -64,14 +59,13 @@ export default {
 	}
   
 	,methods:{
-    fnList(updown){ //리스트 화면으로 이동 함수
-      this.body.updown = updown;
+    fnList(){ //리스트 화면으로 이동 함수
       this.body.LoginFlag = this.LoginFlag;
       this.body.UserID = this.userID;
 			this.$router.push({path:'./list',query:this.body});
     }
     ,fnGetView() {
-			this.$axios.get('http://localhost:3000/api/board/'+this.num,{params:this.body})
+			this.$axios.get('http://localhost:3000/api/board/'+this.num,{params:this.body}) 
 			.then((res)=>{
         this.view = res.data.view.recordset[0];
 				this.subject = this.view.subject;
@@ -92,7 +86,6 @@ export default {
 				this.$refs.subject.focus(); //방식으로 선택자를 찾는다.
 				return;
 			}
-
 			this.form = { //backend로 전송될 POST 데이터
 				board_code:this.board_code
 				,subject:this.subject

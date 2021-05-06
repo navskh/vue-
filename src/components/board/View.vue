@@ -21,14 +21,14 @@
 		</div>
     <template v-if="writerID===userID">
       <div class="btnWrap">
-        <a href="javascript:;" @click="fnList()" class="btn">목록</a>
+        <a href="javascript:;" @click="fnList(`${updown}`)" class="btn">목록</a>
         <a href="javascript:;" @click="fnMod" class="btnAdd btn">수정</a>
         <a href="javascript:;" @click="fnDelete" class="btnDelete btn">삭제</a>
       </div>
     </template>
     <template v-else>
       <div class="btnWrap">
-        <a href="javascript:;" @click="fnList()" class="btn">목록</a>
+        <a href="javascript:;" @click="fnList(`${updown}`)" class="btn">목록</a>
       </div>
     </template>
 	</div>
@@ -69,9 +69,10 @@ export default {
     ,fnMod(){
       this.$router.push({path:'./write',query:this.body}); // 등록화면으로 이동하면서 파라미터를 넘겨준다.
     }
-		,fnList(){
+		,fnList(updown){
       this.body.LoginFlag = this.LoginFlag;
       this.body.UserID = this.userID;
+      this.body.updown = updown;
       this.$router.push({path:'./list',query:this.body});
     }
     
@@ -84,10 +85,8 @@ export default {
       .then((res)=>{
 				if(res.data.success) {
           alert("글이 삭제되었습니다");
-          this.body.LoginFlag = this.LoginFlag;
-          this.body.UserID = this.userID;
-          this.$router.push({path:'./list', query:this.body});
-          this.$router.go();
+          this.fnList(2);
+          this.$router.go();  
         }
         else{
           alert("문제가 생겼습니다.")

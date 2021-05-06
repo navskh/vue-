@@ -18,7 +18,7 @@
 			</div>
 			<div>
 				<h2><label for="passwordConfirm">비밀번호 확인</label></h2>
-        <div class="checkPass">
+        <div class="checkPass" style="left:800px; position:fixed">
 				<input type="password" id="passwordConfirm" v-model="passwordConfirm" />
         <template v-if="passwordConfirm!=''">
           <template v-if="password===passwordConfirm"><font color="green"><b>비밀번호 확인을 완료했습니다.</b></font></template>
@@ -26,8 +26,8 @@
         </template>
         </div>
 			</div>
-      <div class="btnWrap">
-      <a href="javascript:;" @click="fnSubmitForm" class="btnAdd btn">회원가입</a>
+      <div class="btnWrap" style="padding-top:30px;padding-left:20px">
+      <a href="javascript:;" @click="fnSubmitForm" class="btnAdd btn" style="">회원가입</a>
       </div>	
 	</div>
 </template>
@@ -81,9 +81,7 @@ export default {
       }
       this.$axios.post('http://localhost:3000/api/board/'+this.userID,{params:this.user})
       .then((res)=>{
-          console.log(res.data);
 				if(res.data.success) {
-          console.log(res.data.user.rowsAffected[0]);
           this.checkID = 1;
           alert("중복된 아이디가 있습니다.");
         }

@@ -89,7 +89,7 @@ export default {
       }
     }
     ,mounted(){
-      this.fnGetList(2); 
+      this.fnGetList(this.updown); 
     }
   ,methods:{
 		fnGetList(updown) { //데이터 가져오기 함수
@@ -103,7 +103,6 @@ export default {
 			this.$axios.get('http://localhost:3000/api/board',{params:this.body}) 
 			.then((res)=>{
 				if(res.data.success) {
-          console.log(res.data);
 					this.list = res.data.list;
 					this.paging = res.data.paging;
 					this.no = this.paging.totalCount - ((this.paging.page-1) * this.paging.ipp);
@@ -122,7 +121,6 @@ export default {
       this.body.userID = this.userID;
       if(this.LoginFlag==='true')  this.$router.push({path:'./write',query:this.body});
       else alert("로그인하셔야 작성이 가능합니다.")
-			
 		}
 		,fnSearch() { //검색
 			this.paging.page = 1;
